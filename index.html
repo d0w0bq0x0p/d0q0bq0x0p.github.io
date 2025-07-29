@@ -1,0 +1,229 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <body bgcolor="#ECEBE4" text="#5C5C5C">
+  <style type="text/css">
+
+.hidden_box {
+ margin: 10px 0;
+ padding: 0;
+ text-align: left;
+}
+
+.hidden_box label {
+ border: 1px solid #ddd;
+ border-radius: 5px;
+ cursor: pointer;
+ font-weight: bold;
+ color: #4A4A4A;
+ margin: 0 auto;
+ padding: 10px;
+ min-width: 50%;
+}
+
+.hidden_box label:hover {
+ background: #F5F7F6;
+}
+
+.hidden_box label:after {
+ content: " ";	/* 閉じている状態のときにラベルの後ろに続く文字 */
+}
+
+.hidden_box input {
+ display: none;
+}
+
+.hidden_box .hidden_show {
+ height: 0;
+ overflow: hidden;
+ opacity: 0;
+ padding: 0;
+ text-align: left;
+ transition: 0.5s;
+ background: #C9D6D5;
+ color: #3B4C4A;
+ font-size: 0.875rem /* 14px */
+}
+
+.hidden_box input:checked + label:after {
+ content: "🐤";	/* 開いている状態のときにラベルの後ろに続く文字 */
+}
+
+.hidden_box input:checked ~ .hidden_show {
+ height: auto;
+ opacity: 1;
+ padding: 10px 0;
+}
+
+.custom-textarea {
+ font-size: 0.875rem; /* 文字サイズを指定 */
+ background-color: #F0F8FF; /* テキストエリアの背景 */
+ }
+
+#toast {
+  visibility: hidden;
+  min-width: 200px;
+  background-color: #2C6E63;
+  color: #fff;
+  text-align: center;
+  border-radius: 8px;
+  padding: 12px;
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 1000;
+  font-size: 14px;
+  opacity: 0;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+#toast.show {
+  visibility: visible;
+  opacity: 1;
+}
+
+  </style>
+
+</head>
+<body>
+<p>
+┏━━━━━━━━━━━━━━━━━┓<br>
+  　0x0　応対カンペ       <br>
+┗━━━━━━━━━━━━━━━━━┛<br>
+</p>
+
+<p> <!-- ココカラ label1 -->
+<div class="hidden_box">
+ <input type="checkbox" id="label1"/> <!-- Xを任意の数字に変更 -->
+ <label for="label1">【1】受付時聴取テンプレート</label> <!-- Xを上記と同じ数字に変更 -->
+ <div class="hidden_show" id="label1">
+<button onclick="copyText('template1')">▼コピー</button>
+<button onclick="resetText('template1')">▲リセット</button>
+<br>
+
+<textarea class="custom-textarea" id="template1" rows="30" cols="90">
+※不要な項目は削除
+■担当者
+担当者名：●
+登録有無：あり／なし●
+
+■用件
+設定or運用を教えて欲しい／エラーor問題が起きている／利用できない／担当者変更／その他●
+
+■内容
+〇現状
+　●
+
+〇目指すゴール
+　●
+
+■機能やメニュー
+アプリ：勤怠／会計／帳簿書類／ＷＦ／ＧＷ／OZO共通／工数／ＰＪ管理／給与／人事／その他●
+メニュー：●
+申請書経路名：●
+申請書フォーム名：●　※ＷＦ問合せのみ
+
+■環境
+バーチャル名：●
+ログイン許可：あり／なし●
+ログイン可否：確認済／未確認●
+
+カスタム：あり／なし●
+バージョン：●
+ 
+■ユーザー情報
+　ID：●
+所属：●
+氏名：●
+
+文書番号：●
+日付：●
+
+■期日　※確約ＮＧ
+お客様希望：あり／なし●
+期日：●/●　午前／午後／●時迄●
+理由：●
+
+</textarea>
+
+ </div>
+</div>
+</p> <!-- ココマデ -->
+
+
+<p> <!-- ココカラ label2 -->
+<div class="hidden_box">
+ <input type="checkbox" id="label2"/> <!-- Xを任意の数字に変更 -->
+ <label for="label2">【2】トラブルの場合の追加聴取事項</label> <!-- Xを上記と同じ数字に変更 -->
+ <div class="hidden_show" id="label2">
+<button onclick="copyText('template2')">▼コピー</button>
+<button onclick="resetText('template2')">▲リセット</button>
+<br>
+
+<textarea class="custom-textarea" id="template2" rows="20" cols="90">
+※不要な項目は削除
+・メッセージの内容：●　
+　　※画面キャプチャの送付を依頼●
+・現象発生の操作手順：●
+・現象発生の時期：●
+　　∟時期が明確な場合、その時期に行った処理、設定変更等：●
+・発生頻度：毎回／不特定／特定条件／1回のみ●
+・クライアント(発生)環境
+　対象：全PC／特定のPC(複数台)／1台のみ●
+　OS：●
+　OSバージョン：●
+　ブラウザ種類：●
+　ブラウザバージョン：●
+　その他情報：Excel、PDF等／なし●
+
+・処理や運用状況：止まっている／止まっていない●
+・期限の決まっている処理か：はい／いいえ●
+
+
+</textarea>
+
+ </div>
+</div>
+</p> <!-- ココマデ -->
+
+
+<!-- トースト通知 -->
+<div id="toast">コピーしました！</div>
+
+<script>
+function showToast(message = "コピーしました！") {
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.classList.add("show");
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 3000);
+}
+
+function copyText(id) {
+  const textarea = document.getElementById(id);
+  textarea.select();
+  textarea.setSelectionRange(0, textarea.value.length);
+  navigator.clipboard.writeText(textarea.value)
+    .then(() => {
+      showToast("コピーしました！");
+    })
+    .catch(err => {
+      console.error("コピーに失敗しました:", err);
+    });
+}
+
+const initialTemplates = {
+  template1: document.getElementById("template1").value,
+  template2: document.getElementById("template2").value
+};
+
+function resetText(id) {
+  const textarea = document.getElementById(id);
+  textarea.value = initialTemplates[id];
+  showToast("リセットしました！");
+}
+</script>
+
+
+</body>
